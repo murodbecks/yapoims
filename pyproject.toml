@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yapoims"
+version = "0.0.1"
+authors = [
+    { name="Abror Shopulatov", email="murodbeck@proton.me" }
+]
+maintainers = [
+    { name="Abror Shopulatov", email="murodbeck@proton.me" }
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+keywords = ["poi", "point-of-interest", "management-system", "mapping", "navigation", "geospatial", "cli"]
+description = "YAPOIMS - Yet Another POI Management System for storing and querying Points of Interest with visitor tracking capabilities."
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Environment :: Console"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/murodbecks/yapoims"
+"Bug Tracker" = "https://github.com/murodbecks/yapoims/issues"
+"Repository" = "https://github.com/murodbecks/yapoims"
