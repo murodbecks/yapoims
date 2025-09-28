@@ -25,6 +25,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Application Frameworks",
     "Environment :: Console"
 ]
+dependencies = [
+    "pytz==2025.2"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/murodbecks/yapoims"

@@ -1,0 +1,40 @@
+
+poi_types:
+  museum:
+    attributes: ["opening_hours", "entrance_fee", "exhibits"]
+  restaurant:
+    attributes: ["cuisine_type", "price_range", "seating_capacity"]
+  park:
+    attributes: ["area_size", "facilities", "pet_friendly"]
+
+pois:
+  - id: 1
+    name: "Louvre Abu Dhabi"
+    type: "museum"
+    x: 500
+    y: 300
+    attributes:
+      opening_hours: "10:00-18:00"
+      entrance_fee: "63 AED"
+      exhibits: "Art and Culture"
+  - id: 2
+    name: "Central Park"
+    type: "park"
+    x: 200
+    y: 400
+    attributes:
+      area_size: "50 hectares"
+      facilities: "playground, lake"
+      pet_friendly: true
+
+visitors:
+  - id: 1
+    name: "Ahmed Ali"
+    nationality: "UAE"
+    visits:
+      - poi_id: 1
+        date: "15/09/2024"
+        rating: 9
+      - poi_id: 2
+        date: "16/09/2024"
+        rating: 8
