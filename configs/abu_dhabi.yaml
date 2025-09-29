@@ -1,0 +1,476 @@
+poi_types:
+  museum:
+    attributes: ["opening_hours", "entrance_fee", "exhibits", "contact_info"]
+  landmark:
+    attributes: ["year_built", "architectural_style", "dress_code"]
+  theme_park:
+    attributes: ["ticket_price", "main_attractions", "height_restrictions"]
+  park:
+    attributes: ["area_size", "facilities", "pet_friendly"]
+  restaurant:
+    attributes: ["cuisine_type", "price_range", "dress_code", "reservation_required"]
+  mall:
+    attributes: ["number_of_stores", "has_cinema", "specialty_stores"]
+  beach:
+    attributes: ["entry_fee", "water_sports_available", "sunbed_rental_cost"]
+
+pois:
+  - name: "Louvre Abu Dhabi"
+    type: "museum"
+    x: 550
+    y: 850
+    attributes:
+      opening_hours: "10:00-18:30"
+      entrance_fee: "63 AED"
+      exhibits: "Global Art and Civilization"
+      contact_info: "+971 600 56 55 66"
+
+  - name: "Sheikh Zayed Grand Mosque"
+    type: "landmark"
+    x: 800
+    y: 200
+    attributes:
+      year_built: 2007
+      architectural_style: "Mughal, Moorish, Fatimid"
+      dress_code: "Strictly Conservative"
+
+  - name: "Qasr Al Watan"
+    type: "landmark"
+    x: 180
+    y: 350
+    attributes:
+      year_built: 2017
+      architectural_style: "Modern Arabian"
+      dress_code: "Respectful Attire"
+
+  - name: "Emirates Palace Mandarin Oriental"
+    type: "landmark"
+    x: 220
+    y: 380
+    attributes:
+      year_built: "2005" # Edge case: year as a string
+      architectural_style: "Arabian Opulence"
+      dress_code: "Smart Casual"
+
+  - name: "Ferrari World Abu Dhabi"
+    type: "theme_park"
+    x: 850
+    y: 900
+    attributes:
+      ticket_price: "345 AED"
+      main_attractions: "Formula Rossa, Flying Aces"
+      height_restrictions: "Varies by ride"
+
+  - name: "Yas Waterworld Abu Dhabi"
+    type: "theme_park"
+    x: 820
+    y: 920
+    attributes:
+      ticket_price: "295 AED"
+      main_attractions: "Dawwama, Liwa Loop"
+      height_restrictions: "Varies by slide"
+
+  - name: "Warner Bros. World Abu Dhabi"
+    type: "theme_park"
+    x: 880
+    y: 880
+    attributes:
+      ticket_price: "345 AED"
+      main_attractions: "Batman: Knight Flight, The Riddler Revolution"
+      height_restrictions: "Varies by ride"
+
+  - name: "Umm Al Emarat Park"
+    type: "park"
+    x: 400
+    y: 450
+    attributes:
+      area_size: "14.5 hectares"
+      facilities: "Wisdom Garden, Animal Barn, Amphitheatre"
+      pet_friendly: true
+
+  - name: "Jubail Mangrove Park"
+    type: "park"
+    x: 700
+    y: 750
+    attributes:
+      area_size: "12 km^2"
+      facilities: "Boardwalk, Kayaking"
+      pet_friendly: "No" # Edge case: pet_friendly as a string
+
+  - name: "Fouquet's Abu Dhabi"
+    type: "restaurant"
+    x: 555
+    y: 855
+    attributes:
+      cuisine_type: "French"
+      dress_code: "Smart Elegant"
+      reservation_required: true
+      # Edge case: Missing 'price_range' attribute
+
+  - name: "Al Fanar Restaurant & Cafe"
+    type: "restaurant"
+    x: 860
+    y: 910
+    attributes:
+      cuisine_type: "Emirati"
+      price_range: "Mid-range"
+      dress_code: "Casual"
+      reservation_required: false
+
+  - name: "Salt"
+    type: "restaurant"
+    x: 410
+    y: 460
+    attributes:
+      cuisine_type: "Burgers"
+      price_range: "Affordable"
+      dress_code: "Casual"
+      reservation_required: false
+      has_drive_thru: true # Edge case: Extra attribute not in poi_type
+
+  - name: "Yas Mall"
+    type: "mall"
+    x: 860
+    y: 910
+    attributes:
+      number_of_stores: 370
+      has_cinema: true
+      specialty_stores: "Apple, LEGO, Tryano"
+
+  - name: "The Galleria Al Maryah Island"
+    type: "mall"
+    x: 500
+    y: 600
+    attributes:
+      number_of_stores: 400
+      has_cinema: true
+      specialty_stores: "Luxury brands, Waitrose"
+      cuisine_type: "Multiple food courts" # Edge case: Mismatched attribute
+
+  - name: "Corniche Beach"
+    type: "beach"
+    x: 250
+    y: 500
+    attributes:
+      entry_fee: "Free (public sections)"
+      water_sports_available: true
+      sunbed_rental_cost: "25 AED"
+
+  - name: "Saadiyat Beach"
+    type: "beach"
+    x: 600
+    y: 880
+    attributes:
+      entry_fee: "35 AED"
+      water_sports_available: false
+      sunbed_rental_cost: "50 AED"
+
+  - name: "Qasr Al Hosn"
+    type: "museum"
+    x: 350
+    y: 550
+    attributes:
+      opening_hours: "10:00-21:00"
+      entrance_fee: "30 AED"
+      exhibits: "History of Abu Dhabi"
+      contact_info: "+971 2 697 6400"
+
+  - name: "Capital Gate"
+    type: "landmark"
+    x: 750
+    y: 250
+    attributes:
+      year_built: 2011
+      architectural_style: "Deconstructivism"
+      dress_code: "Business Casual (Hotel inside)"
+
+  - name: "Etihad Towers"
+    type: "landmark"
+    x: 200
+    y: 400
+    attributes:
+      year_built: 2011
+      architectural_style: "Modern"
+      dress_code: "Smart Casual"
+
+  - name: "Mangrove National Park"
+    type: "park"
+    x: 720
+    y: 400
+    attributes:
+      area_size: "19 km^2"
+      facilities: "Kayaking, Bird Watching"
+      pet_friendly: false
+
+  - name: "SeaWorld Yas Island"
+    type: "theme_park"
+    x: 800
+    y: 850
+    attributes:
+      ticket_price: '375 AED' # Edge case: single quotes
+      main_attractions: 'Marine life exhibits, Manta Coaster'
+      height_restrictions: 'Varies by ride'
+
+  - name: "Yas Marina Circuit"
+    type: "landmark"
+    x: 900
+    y: 800
+    attributes:
+      year_built: 2009
+      architectural_style: "Modern Racetrack"
+      dress_code: "Casual"
+
+
+visitors:
+  - name: "Ahmed Al Kuwaiti"
+    nationality: "Emirati"
+    visits:
+      - poi_name: "Sheikh Zayed Grand Mosque"
+        date: "20/08/2025"
+        rating: 10
+      - poi_name: "Umm Al Emarat Park"
+        date: "2025-09-01"
+        rating: 9
+      - poi_name: "Yas Mall"
+        date: "2025-09-15"
+        rating: 8
+      - poi_name: "Salt"
+        date: "October 1, 2025"
+        rating: 9.5
+      - poi_name: "Qasr Al Watan"
+        date: "12/10/2025"
+        rating: 10
+      - poi_name: "Umm Al Emarat Park"
+        date: "2025-10-20"
+        rating: 8.5
+
+  - name: "John Smith"
+    nationality: "American"
+    visits:
+      - poi_name: "Ferrari World Abu Dhabi"
+        date: "July 15, 2025"
+        rating: 8.5
+      - poi_name: "Warner Bros. World Abu Dhabi"
+        date: "2025-07-16"
+        rating: 9
+      - poi_name: "Yas Waterworld Abu Dhabi"
+        date: "17/07/2025"
+        rating: 9
+
+  - name: "Fatima Al Mansoori"
+    nationality: "Emirati"
+    visits:
+      - poi_name: "The Galleria Al Maryah Island"
+        date: "05/09/2025"
+        rating: 8
+      - poi_name: "Salt"
+        date: "05/09/2025"
+        rating: 9
+      - poi_name: "The Galleria Al Maryah Island"
+        date: "2025-09-19"
+        rating: 9
+      - poi_name: "Yas Mall"
+        date: "September 26, 2025"
+        rating: 7.5
+      - poi_name: "Fouquet's Abu Dhabi"
+        date: "2025-10-05"
+        rating: "10"
+      - poi_name: "The Galleria Al Maryah Island"
+        date: "2025-10-11"
+        rating: 8.5
+      - poi_name: "Yas Mall"
+        date: "2025-10-25"
+        rating: 8
+
+  - name: "Chloe Dubois"
+    nationality: "French"
+    visits:
+      - poi_name: "Louvre Abu Dhabi"
+        date: "September 2, 2025"
+        rating: 9.5
+      - poi_name: "Fouquet's Abu Dhabi"
+        date: "2025-09-02"
+        rating: 10
+
+  - name: "Liam Murphy"
+    nationality: "Irish"
+    visits:
+      - poi_name: "Yas Waterworld Abu Dhabi"
+        date: "12/08/2025"
+        rating: 9
+      - poi_name: "Corniche Beach"
+        date: "14/08/2025"
+        rating: 7
+
+  - name: "Priya Sharma"
+    nationality: "Indian"
+    visits:
+      - poi_name: "Sheikh Zayed Grand Mosque"
+        date: "2025-09-10"
+        rating: 10
+      - poi_name: "Al Fanar Restaurant & Cafe"
+        date: "2025-09-10"
+        rating: 8
+      - poi_name: "Warner Bros. World Abu Dhabi"
+        date: "2025-09-11"
+        rating: 8.5
+
+  - name: "Kenji Tanaka"
+    nationality: "Japanese"
+    visits:
+      - poi_name: "Qasr Al Hosn"
+        date: "03/07/2025"
+        rating: 8.5
+      - poi_name: "Abu Dhabi Falcon Hospital" # Edge case: POI not in the list
+        date: "04/07/2025"
+        rating: 9
+
+  - name: "Isabella Rossi"
+    nationality: "Italian"
+    visits:
+      - poi_name: "Ferrari World Abu Dhabi"
+        date: "August 22, 2025"
+        rating: "10" # Edge case: rating as a string
+      - poi_name: "Sheikh Zayed Grand Mosque"
+        date: "2025-08-24"
+        rating: null # Edge case: null rating
+
+  - name: "Wei Zhang"
+    nationality: "Chinese"
+    visits:
+      - poi_name: "Yas Mall"
+        date: "01/10/2025"
+        rating: 8
+      - poi_name: "Louvre Abu Dhabi"
+        date: "02/10/2025"
+        rating: 9
+      - poi_name: "SeaWorld Yas Island"
+        date: "October 3, 2025"
+        rating: 9
+      - poi_name: "Etihad Towers"
+        date: "2025-10-04"
+        rating: 8
+
+  - name: "Hans Müller"
+    nationality: "German"
+    visits:
+      - poi_name: "Etihad Towers"
+        date: "19/09/2025"
+        rating: 7.5
+      - poi_name: "Capital Gate"
+        date: "20/09/2025"
+        rating: 8
+
+  - name: "Omar Hassan"
+    nationality: "Egyptian"
+    visits:
+      - poi_name: "Qasr Al Watan"
+        date: "2025-06-11"
+        rating: 9
+
+  - name: "Sofia Petrova"
+    nationality: "Russian"
+    visits:
+      - poi_name: "Saadiyat Beach"
+        date: "July 30, 2025"
+        rating: 8
+      - poi_name: "The Galleria Al Maryah Island"
+        date: "31/07/2025"
+        rating: 8.5
+
+  - name: "David Williams"
+    nationality: "British"
+    visits:
+      - poi_name: "Yas Marina Circuit"
+        date: "2025-11-23"
+        rating: 10
+
+  - name: "Maria Garcia"
+    nationality: "Spanish"
+    visits:
+      - poi_name: "Louvre Abu Dhabi"
+        date: "14/09/2025"
+        rating: 9
+      - poi_name: "Corniche Beach"
+        date: "2025-09-15"
+        rating: 7
+
+  - name: "Mohammed bin Zayed"
+    nationality: "Emirati"
+    visits:
+      - poi_name: "Qasr Al Watan"
+        date: "2025-01-01"
+        rating: 10
+
+  - name: "Oliver Brown"
+    nationality: "Australian"
+    visits: [] # Edge case: Visitor with no visits
+
+  - name: "Anika Schmidt"
+    nationality: "German"
+    visits:
+      - poi_name: "Emirates Palace Mandarin Oriental"
+        date: "18/09/2025"
+        rating: 9.5
+
+  - name: "Abdullah Al Saud"
+    nationality: "Saudi"
+    visits:
+      - poi_name: "Warner Bros. World Abu Dhabi"
+        date: "2025-08-08"
+        rating: 9
+        
+  - name: "Carlos Silva"
+    nationality: "Brazilian"
+    visits:
+      - poi_name: "Yas Waterworld Abu Dhabi"
+        date: "2025-07-25"
+        rating: 9
+      - poi_name: "SeaWorld Yas Island"
+        date: "26/07/2025"
+        rating: 8.5
+
+  - name: "Elise Janssen"
+    nationality: "Dutch"
+    visits: [] # Edge case: Visitor with no visits
+
+  - name: "Jin-ho Park"
+    nationality: "South Korean"
+    visits:
+      - poi_name: "Yas Mall"
+        date: "2025-08-15"
+        rating: 7.5
+
+  - name: "Aliya Karimova"
+    nationality: "Kazakh"
+    visits:
+      - poi_name: "The Galleria Al Maryah Island"
+        date: "10/09/2025"
+        rating: 9
+      - poi_name: "Sheikh Zayed Grand Mosque"
+        date: "12/09/2025"
+        rating: 10
+
+  - name: "Lucas Eriksson"
+    nationality: "Swedish"
+    visits:
+      - poi_name: "Saadiyat Beach"
+        date: "2025-08-01"
+        rating: 8
+        
+  - name: "Amelia Tremblay"
+    nationality: "Canadian"
+    visits:
+      - poi_name: "Qasr Al Hosn"
+        date: "November 5, 2025"
+        rating: 8
+      - poi_name: "Jubail Mangrove Park"
+        date: "2025-11-06"
+        rating: 8.5
+
+  - name: "Nasser Al-Attiyah"
+    nationality: "Qatari"
+    visits:
+      - poi_name: "Yas Marina Circuit"
+        date: "2025-11-22"
+        rating: 9.5

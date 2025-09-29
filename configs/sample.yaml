@@ -8,8 +8,7 @@ poi_types:
     attributes: ["area_size", "facilities", "pet_friendly"]
 
 pois:
-  - id: 1
-    name: "Louvre Abu Dhabi"
+  - name: "Louvre Abu Dhabi"
     type: "museum"
     x: 500
     y: 300
@@ -17,8 +16,7 @@ pois:
       opening_hours: "10:00-18:00"
       entrance_fee: "63 AED"
       exhibits: "Art and Culture"
-  - id: 2
-    name: "Central Park"
+  - name: "Central Park"
     type: "park"
     x: 200
     y: 400
@@ -26,15 +24,31 @@ pois:
       area_size: "50 hectares"
       facilities: "playground, lake"
       pet_friendly: true
+  - name: "Uzbechka"
+    type: "restaurant"
+    x: 650
+    y: 500
+    attributes:
+      cuisine_type: "Uzbek"
+      seating_capacity: "50 people"
+      exhibits: "Art and Culture"
 
 visitors:
-  - id: 1
-    name: "Ahmed Ali"
+  - name: "Ahmed Ali"
     nationality: "UAE"
     visits:
-      - poi_id: 1
+      - poi_name: "Louvre Abu Dhabi"
         date: "15/09/2024"
         rating: 9
-      - poi_id: 2
+      - poi_name: "Central Park"
         date: "16/09/2024"
         rating: 8
+  - name: "John Cena"
+    nationality: "British"
+    visits:
+      - poi_name: "Louvre Abu Dhabi"
+        date: "29/07/2025"
+        rating: 7.5
+      - poi_name: "Uzbechka"
+        date: "01/08/2025"
+        rating: 10

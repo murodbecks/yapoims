@@ -1,0 +1,346 @@
+poi_types:
+  bazaar:
+    attributes: ["main_goods", "working_hours", "has_food_court"]
+  landmark:
+    attributes: ["year_built", "architectural_style", "historical_significance"]
+  museum:
+    attributes: ["opening_hours", "entrance_fee", "main_collection"]
+  park:
+    attributes: ["area_size", "facilities", "has_fountain"]
+  restaurant:
+    attributes: ["cuisine_type", "price_range", "serves_alcohol"]
+  metro_station:
+    attributes: ["line", "architectural_theme", "artist"]
+  theatre:
+    attributes: ["capacity", "main_genres", "dress_code"]
+
+pois:
+  - name: "Chorsu Bazaar"
+    type: "bazaar"
+    x: 350
+    y: 400
+    attributes:
+      main_goods: "Spices, textiles, produce, bread"
+      working_hours: "07:00-19:00"
+      has_food_court: true
+      recommended_duration: "3 hours" # Edge case: Extra attribute
+
+  - name: "Amir Timur Square"
+    type: "landmark"
+    x: 500
+    y: 500
+    attributes:
+      year_built: 1882
+      architectural_style: "Tsarist, Soviet, Modern"
+      historical_significance: "Central square dedicated to Amir Timur"
+
+  - name: "Amir Timur Museum"
+    type: "museum"
+    x: 520
+    y: 510
+    attributes:
+      opening_hours: "10:00-17:00"
+      entrance_fee: "25000 UZS"
+      main_collection: "Timurid Dynasty history"
+
+  - name: "Independence Square (Mustaqillik Maydoni)"
+    type: "landmark"
+    x: 450
+    y: 600
+    attributes:
+      year_built: 1991
+      architectural_style: "Soviet, Modern Uzbek"
+      historical_significance: "Main square of Uzbekistan, symbolizing independence"
+
+  - name: "Tashkent Metro: Kosmonavtlar"
+    type: "metro_station"
+    x: 550
+    y: 450
+    attributes:
+      line: "Uzbekistan (Blue)"
+      architectural_theme: "Soviet Cosmonautics"
+      artist: "S. Sultonmuradov"
+
+  - name: "Tashkent Metro: Alisher Navoi"
+    type: "metro_station"
+    x: 450
+    y: 480
+    attributes:
+      line: "Uzbekistan (Blue)"
+      architectural_theme: "Poetry of Alisher Navoi"
+      artist: "I. Kadyrov"
+
+  - name: "Navoi Theatre"
+    type: "theatre"
+    x: 580
+    y: 530
+    attributes:
+      capacity: 1400
+      main_genres: "Opera, Ballet"
+      dress_code: "Formal"
+
+  - name: "Tashkent Tower"
+    type: "landmark"
+    x: 600
+    y: 800
+    attributes:
+      year_built: "1985" # Edge case: year as a string
+      architectural_style: "Soviet Modernism"
+      historical_significance: "Tallest structure in Central Asia"
+
+  - name: "State Museum of History of Uzbekistan"
+    type: "museum"
+    x: 590
+    y: 550
+    attributes:
+      opening_hours: '10:00-17:00'
+      entrance_fee: 20000 # Edge case: entrance_fee as number
+      main_collection: 'Central Asian Archaeology and Ethnography'
+
+  - name: "Hotel Uzbekistan"
+    type: "landmark"
+    x: 510
+    y: 520
+    attributes:
+      year_built: 1974
+      architectural_style: "Soviet Brutalism"
+      historical_significance: "Iconic Soviet-era hotel"
+      
+  - name: "Kukeldash Madrasah"
+    type: "landmark"
+    x: 360
+    y: 410
+    attributes:
+      year_built: 1570
+      architectural_style: "Islamic Architecture"
+      historical_significance: "One of the oldest surviving buildings in Tashkent"
+      
+  - name: "Plov Center (Besh Qozon)"
+    type: "restaurant"
+    x: 610
+    y: 810
+    attributes:
+      cuisine_type: "Uzbek (Plov)"
+      serves_alcohol: false
+      # Edge case: Missing 'price_range'
+
+  - name: "Caravan"
+    type: "restaurant"
+    x: 480
+    y: 350
+    attributes:
+      cuisine_type: "Uzbek (Fine Dining)"
+      price_range: "Expensive"
+      serves_alcohol: true
+
+  - name: "Tashkent City Park"
+    type: "park"
+    x: 300
+    y: 550
+    attributes:
+      area_size: "18.6 hectares"
+      facilities: "Planetarium, Amphitheatre, Musical Fountain"
+      has_fountain: true
+
+  - name: "Japanese Garden"
+    type: "park"
+    x: 700
+    y: 750
+    attributes:
+      area_size: "6 hectares"
+      facilities: "Teahouse, Ponds, Walking Paths"
+      has_fountain: "Yes" # Edge case: boolean as string
+
+  - name: "Magic City Park"
+    type: "park"
+    x: 320
+    y: 500
+    attributes:
+      area_size: "21 hectares"
+      facilities: "Aquarium, Rides, Castle"
+      has_fountain: true
+
+  - name: "Minor Mosque"
+    type: "landmark"
+    x: 550
+    y: 750
+    attributes:
+      year_built: 2014
+      architectural_style: "Modern Islamic"
+      historical_significance: "New 'White Mosque' of Tashkent"
+
+  - name: "Hazrati Imam Complex"
+    type: "landmark"
+    x: 300
+    y: 350
+    attributes:
+      year_built: 2007 # Reconstructed
+      architectural_style: "Traditional Islamic"
+      historical_significance: "Holds the Uthman Quran, the world's oldest Quran"
+
+  - name: "Barak-Khan Madrasah"
+    type: "landmark"
+    x: 310
+    y: 360
+    attributes:
+      year_built: 1532
+      architectural_style: "Islamic Architecture"
+      historical_significance: "Part of the Hazrati Imam Complex"
+
+  - name: "Tashkent Metro: Bodomzor"
+    type: "metro_station"
+    x: 620
+    y: 700
+    attributes:
+      line: "Yunusobod (Green)"
+      architectural_theme: "Modern, Minimalist"
+      artist: "Unknown"
+
+  - name: "Ilkhom Theatre"
+    type: "theatre"
+    x: 530
+    y: 380
+    attributes:
+      capacity: 150
+      main_genres: "Experimental, Drama"
+      dress_code: "Casual"
+
+visitors:
+  - name: "Kamola Yusupova"
+    nationality: "Uzbek"
+    visits:
+      - poi_name: "Tashkent City Park"
+        date: "2025-07-10"
+        rating: 9
+      - poi_name: "Magic City Park"
+        date: "2025-07-18"
+        rating: 8.5
+      - poi_name: "Chorsu Bazaar"
+        date: "August 2, 2025"
+        rating: 10
+      - poi_name: "Plov Center (Besh Qozon)"
+        date: "2025-08-02"
+        rating: 9.5
+      - poi_name: "Magic City Park"
+        date: "2025-08-25"
+        rating: 9
+      - poi_name: "Chorsu Bazaar"
+        date: "06/09/2025"
+        rating: 10
+
+  - name: "Michael Chen"
+    nationality: "American"
+    visits:
+      - poi_name: "Amir Timur Museum"
+        date: "15/09/2025"
+        rating: 8
+      - poi_name: "Tashkent Metro: Kosmonavtlar"
+        date: "2025-09-15"
+        rating: 10
+      - poi_name: "Chorsu Bazaar"
+        date: "2025-09-16"
+        rating: 9
+
+  - name: "Timur Salimov"
+    nationality: "Uzbek"
+    visits:
+      - poi_name: "Amir Timur Square"
+        date: "2025-05-20"
+        rating: 8
+      - poi_name: "Hotel Uzbekistan"
+        date: "2025-05-20"
+        rating: 7.5
+      - poi_name: "Plov Center (Besh Qozon)"
+        date: "2025-08-10"
+        rating: 10
+      - poi_name: "Navoi Theatre"
+        date: "2025-10-18"
+        rating: 9
+
+  - name: "Elena Ivanova"
+    nationality: "Russian"
+    visits:
+      - poi_name: "Navoi Theatre"
+        date: "September 5, 2025"
+        rating: 9.5
+      - poi_name: "State Museum of History of Uzbekistan"
+        date: "2025-09-06"
+        rating: 8
+        
+  - name: "Alexei Volkov"
+    nationality: "Russian"
+    visits: [] # Edge case: Visitor with no visits
+
+  - name: "Ayse Yilmaz"
+    nationality: "Turkish"
+    visits:
+      - poi_name: "Hazrati Imam Complex"
+        date: "21/08/2025"
+        rating: 10
+      - poi_name: "Kukeldash Madrasah"
+        date: "21/08/2025"
+        rating: 8.5
+      - poi_name: "Chorsu Bazaar"
+        date: "2025-08-22"
+        rating: 9
+
+  - name: "Park Min-jun"
+    nationality: "South Korean"
+    visits:
+      - poi_name: "Magic City Park"
+        date: "2025-07-29"
+        rating: 8
+      - poi_name: "Caravan"
+        date: "July 29, 2025"
+        rating: 9
+
+  - name: "Dmitry Orlov"
+    nationality: "Belarusian"
+    visits:
+      - poi_name: "Independence Square (Mustaqillik Maydoni)"
+        date: "August 11, 2025"
+        rating: 8
+      - poi_name: "Tashkent Tower"
+        date: "2025-08-12"
+        rating: null # Edge case: null rating
+
+  - name: "Sophie Schmidt"
+    nationality: "German"
+    visits:
+      - poi_name: "Amir Timur Museum"
+        date: "01/10/2025"
+        rating: 8.5
+      - poi_name: "Ilkhom Theatre"
+        date: "02/10/2025"
+        rating: 9.5
+        
+  - name: "Nodira Karimova"
+    nationality: "Uzbek"
+    visits:
+      - poi_name: "Samarkand Darvoza Mall" # Edge case: POI not in the list
+        date: "2025-09-13"
+        rating: 8
+      - poi_name: "Japanese Garden"
+        date: "2025-09-20"
+        rating: 7
+
+  - name: "Jean-Pierre Dubois"
+    nationality: "French"
+    visits:
+      - poi_name: "State Museum of History of Uzbekistan"
+        date: "October 15, 2025"
+        rating: 8
+        
+  - name: "Aditya Singh"
+    nationality: "Indian"
+    visits:
+      - poi_name: "Minor Mosque"
+        date: "2025-09-08"
+        rating: "9" # Edge case: rating as string
+
+  - name: "Saida Mirziyoyeva"
+    nationality: "Uzbek"
+    visits:
+      - poi_name: "Navoi Theatre"
+        date: "10/10/2025"
+        rating: 10
