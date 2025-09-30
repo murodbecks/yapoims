@@ -110,7 +110,7 @@ class PoiManagementSystem:
 
         return True
 
-    def add_poi(self, poi_name: str, poi_type: str, poi_x: Union[int, float], poi_y: Union[int, float], poi_attributes: dict) -> bool:
+    def add_poi(self, poi_name: str, poi_type: str, poi_x: Union[int, float], poi_y: Union[int, float], poi_attributes: dict = None) -> bool:
         check_type(poi_name, str, "poi_name")
         check_type(poi_type, str, "poi_type")
         check_type(poi_x, Union[int, float], "poi_x")

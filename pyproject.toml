@@ -26,8 +26,10 @@ classifiers = [
     "Environment :: Console"
 ]
 dependencies = [
-    "pytz==2025.2"
+    "pytz==2025.2",
+    "pytest==8.4.2"
 ]
+
 
 [project.urls]
 "Homepage" = "https://github.com/murodbecks/yapoims"

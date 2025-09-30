@@ -75,7 +75,7 @@ class Poi:
         Returns:
             A list containing all attribute names for this POI.
         """
-        return self.attributes.keys()
+        return list(self.attributes.keys())
     
     def get_coordinates(self) -> Tuple[Union[int, float], Union[int, float]]:
         """
