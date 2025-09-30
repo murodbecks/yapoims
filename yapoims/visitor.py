@@ -2,6 +2,7 @@ import re
 from datetime import datetime
 from typing import Dict, Optional, List, Union, Any
 
+from yapoims.utils import check_type
 
 class Visitor:
     """
@@ -80,7 +81,7 @@ class Visitor:
         """
         return len(self.get_visits())
     
-    def get_visited_poi_ids(self) -> List[Union[str, int]]:
+    def get_visited_poi_ids(self) -> List[str]:
         """
         Return a list of all POI IDs that this visitor has visited.
         
@@ -90,7 +91,7 @@ class Visitor:
         """
         return [visit['poi_id'] for visit in self.get_visits()]
     
-    def get_unique_visited_poi_ids(self) -> List[Union[str, int]]:
+    def get_unique_visited_poi_ids(self) -> List[str]:
         """
         Return a list of unique POI IDs that this visitor has visited.
         
@@ -99,7 +100,7 @@ class Visitor:
         """
         return list(set(self.get_visited_poi_ids()))
     
-    def has_visited_poi(self, poi_id: Union[str, int]) -> bool:
+    def has_visited_poi(self, poi_id: str) -> bool:
         """
         Check if this visitor has ever visited a specific POI.
         
@@ -180,7 +181,7 @@ class Visitor:
         return clean_visit
 
     # Visit management methods
-    def add_visit(self, poi_id: Union[str, int], date: str, rating: Optional[int] = None) -> bool:
+    def add_visit(self, poi_id: str, date: str, rating: Optional[int] = None) -> bool:
         """
         Add a new visit record for this visitor.
         
@@ -207,7 +208,27 @@ class Visitor:
             print('Invalid visit data - please check poi_id, date format (dd/mm/yyyy), and rating (1-10)')
             return False
     
-    def get_visits_to_poi(self, poi_id: Union[str, int]) -> List[Dict[str, Any]]:
+    def delete_visit(self, poi_id: str) -> bool:
+        check_type(poi_id, str, "poi_id")
+        
+        all_visits = self.get_visits()
+        
+        poi_idx_to_delete = None
+
+        for i, visit in enumerate(all_visits):
+            if visit['poi_id'] == poi_id:
+                poi_idx_to_delete = i
+                break
+        
+        if poi_idx_to_delete is None:
+            print(f"Warning: Trying to delete non-existent POI id: {poi_id}")
+            return False
+        else:
+            all_visits.pop(poi_idx_to_delete)
+            object.__setattr__(self, "visits", all_visits)
+            return True
+    
+    def get_visits_to_poi(self, poi_id: str) -> List[Dict[str, Any]]:
         """
         Get all visits made by this visitor to a specific POI.
         

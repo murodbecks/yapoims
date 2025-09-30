@@ -68,6 +68,15 @@ class Poi:
         """
         return self.attributes.copy()
     
+    def get_attribute_names(self) -> Tuple[str]:
+        """
+        Return the attribute names of the POI.
+        
+        Returns:
+            A list containing all attribute names for this POI.
+        """
+        return self.attributes.keys()
+    
     def get_coordinates(self) -> Tuple[Union[int, float], Union[int, float]]:
         """
         Return the coordinates as a tuple.
