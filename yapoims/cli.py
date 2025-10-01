@@ -50,6 +50,8 @@ class PoiManagementCLI:
         print("5. List POIs by Type")
         print("6. Rename POI Type")
         print("7. Manage POI Type Attributes")
+        print("8. View All POI Types")
+        print("9. View All POIs")
         print("0. Back to Main Menu")
 
     def display_visitor_management_menu(self):
@@ -60,6 +62,7 @@ class PoiManagementCLI:
         print("2. Add Visit to POI")
         print("3. List All Visitors")
         print("4. View Visitor Details")
+        print("5. View All Visitors (Detailed)")
         print("0. Back to Main Menu")
 
     def display_poi_queries_menu(self):
@@ -93,6 +96,7 @@ class PoiManagementCLI:
         print("1. Overall Statistics")
         print("2. POI Type Details")
         print("3. Map Boundary Info")
+        print("4. Quick System Overview")
         print("0. Back to Main Menu")
 
     def display_config_menu(self):
@@ -173,6 +177,10 @@ class PoiManagementCLI:
             self.rename_poi_type()
         elif choice == "7":
             self.manage_poi_type_attributes()
+        elif choice == "8":
+            self.view_all_poi_types()
+        elif choice == "9":
+            self.view_all_pois()
         else:
             print("Invalid choice. Please try again.")
     
@@ -440,6 +448,8 @@ class PoiManagementCLI:
             self.list_all_visitors()
         elif choice == "4":
             self.view_visitor_details()
+        elif choice == "5":
+            self.view_all_visitors_detailed()
         else:
             print("Invalid choice. Please try again.")
 
@@ -842,6 +852,8 @@ class PoiManagementCLI:
             self.show_poi_type_details()
         elif choice == "3":
             self.show_map_boundary_info()
+        elif choice == "4":
+            self.quick_system_overview()
         else:
             print("Invalid choice. Please try again.")
 
@@ -1008,6 +1020,235 @@ class PoiManagementCLI:
             print(f"⚠ POIs with invalid coordinates: {len(invalid_coords)}")
         else:
             print("✓ All POIs have valid coordinates (0-1000)")
+
+    def view_all_poi_types(self):
+        """Display all POI types with their attributes and POI counts"""
+        poi_types = self.system.get_poi_types()
+        
+        if not poi_types:
+            print("No POI types available.")
+            return
+        
+        print(f"\n=== ALL POI TYPES ({len(poi_types)}) ===")
+        print(f"{'Type':<20} {'POI Count':<10} {'Attributes'}")
+        print("-" * 80)
+        
+        # Sort POI types alphabetically
+        for poi_type in sorted(poi_types.keys()):
+            info = poi_types[poi_type]
+            attributes_str = ", ".join(info['attributes']) if info['attributes'] else "None"
+            
+            # Truncate long attribute lists
+            if len(attributes_str) > 45:
+                attributes_str = attributes_str[:42] + "..."
+                
+            print(f"{poi_type:<20} {info['num_pois']:<10} {attributes_str}")
+        
+        print()
+
+    def view_all_pois(self):
+        """Display all POIs in a formatted table"""
+        pois = self.system.get_pois()
+        
+        if not pois:
+            print("No POIs available.")
+            return
+        
+        print(f"\n=== ALL POIs ({len(pois)}) ===")
+        
+        # Option to filter by POI type
+        filter_choice = input("Filter by POI type? (Enter type name or press Enter for all): ").strip()
+        
+        if filter_choice:
+            pois = [poi for poi in pois if poi.get_poi_type().lower() == filter_choice.lower()]
+            if not pois:
+                print(f"No POIs found for type '{filter_choice}'.")
+                return
+            print(f"Showing {len(pois)} POIs of type '{filter_choice}':")
+        
+        print(f"\n{'ID':<12} {'Name':<25} {'Type':<15} {'Coordinates':<15} {'Attributes'}")
+        print("-" * 95)
+        
+        # Sort POIs by name
+        sorted_pois = sorted(pois, key=lambda p: p.get_name())
+        
+        for poi in sorted_pois:
+            # Format attributes for display
+            attrs = poi.get_attributes()
+            if attrs:
+                # Show first few key-value pairs
+                attr_items = list(attrs.items())[:2]
+                attrs_str = ", ".join([f"{k}={v}" for k, v in attr_items])
+                if len(attrs) > 2:
+                    attrs_str += f" (+{len(attrs)-2} more)"
+            else:
+                attrs_str = "None"
+            
+            # Truncate if too long
+            if len(attrs_str) > 25:
+                attrs_str = attrs_str[:22] + "..."
+            
+            coords_str = f"({poi.get_x()}, {poi.get_y()})"
+            
+            print(f"{poi.get_id():<12} {poi.get_name():<25} {poi.get_poi_type():<15} {coords_str:<15} {attrs_str}")
+        
+        print()
+
+    def view_all_visitors_detailed(self):
+        """Display all visitors with detailed information"""
+        visitors = self.system.get_visitors()
+        
+        if not visitors:
+            print("No visitors available.")
+            return
+        
+        print(f"\n=== ALL VISITORS - DETAILED VIEW ({len(visitors)}) ===")
+        
+        # Sort visitors by name
+        sorted_visitors = sorted(visitors, key=lambda v: v.get_name())
+        
+        for visitor in sorted_visitors:
+            print(f"\n📍 {visitor.get_name()} ({visitor.get_nationality()})")
+            print(f"   ID: {visitor.get_id()}")
+            print(f"   Total visits: {visitor.get_num_visits()}")
+            print(f"   Unique POIs: {len(visitor.get_unique_visited_poi_ids())}")
+            
+            avg_rating = visitor.get_average_rating()
+            if avg_rating:
+                print(f"   Average rating: {avg_rating:.1f}/10")
+            else:
+                print(f"   Average rating: No ratings given")
+            
+            # Show recent visits (last 3)
+            visits = visitor.get_visits()
+            if visits:
+                print("   Recent visits:")
+                
+                # Get POI names for visits
+                pois_dict = {poi.get_id(): poi.get_name() for poi in self.system.get_pois()}
+                
+                # Show last 3 visits
+                recent_visits = visits[-3:] if len(visits) > 3 else visits
+                
+                for visit in recent_visits:
+                    poi_name = pois_dict.get(visit['poi_id'], 'Unknown POI')
+                    rating_str = f" (★{visit['rating']})" if visit.get('rating') else ""
+                    print(f"     • {poi_name} on {visit['date']}{rating_str}")
+                
+                if len(visits) > 3:
+                    print(f"     ... and {len(visits) - 3} more visits")
+            else:
+                print("   No visits recorded")
+        
+        print()
+
+    def quick_system_overview(self):
+        """Quick overview of the entire system"""
+        poi_types = self.system.get_poi_types()
+        pois = self.system.get_pois()
+        visitors = self.system.get_visitors()
+        
+        print("\n" + "="*50)
+        print("           QUICK SYSTEM OVERVIEW")
+        print("="*50)
+        
+        # Basic counts
+        print(f"📍 POI Types: {len(poi_types)}")
+        print(f"🏢 POIs: {len(pois)}")
+        print(f"👥 Visitors: {len(visitors)}")
+        
+        if not pois and not visitors:
+            print("\nSystem is empty. Load a configuration or add data manually.")
+            return
+        
+        # POI Types summary
+        if poi_types:
+            print(f"\n📋 POI Types:")
+            for poi_type, info in sorted(poi_types.items()):
+                print(f"   • {poi_type}: {info['num_pois']} POIs")
+        
+        # Top POIs by visits
+        if visitors and pois:
+            poi_visit_counts = {}
+            pois_dict = {poi.get_id(): poi.get_name() for poi in pois}
+            
+            for visitor in visitors:
+                for poi_id in visitor.get_visited_poi_ids():
+                    poi_visit_counts[poi_id] = poi_visit_counts.get(poi_id, 0) + 1
+            
+            if poi_visit_counts:
+                print(f"\n🔥 Most Popular POIs:")
+                sorted_pois = sorted(poi_visit_counts.items(), key=lambda x: x[1], reverse=True)
+                for poi_id, count in sorted_pois[:3]:
+                    poi_name = pois_dict.get(poi_id, 'Unknown')
+                    print(f"   • {poi_name}: {count} visits")
+        
+        # Most active visitors
+        if visitors:
+            print(f"\n⭐ Most Active Visitors:")
+            sorted_visitors = sorted(visitors, key=lambda v: v.get_num_visits(), reverse=True)
+            for visitor in sorted_visitors[:3]:
+                unique_pois = len(visitor.get_unique_visited_poi_ids())
+                print(f"   • {visitor.get_name()}: {visitor.get_num_visits()} visits to {unique_pois} POIs")
+        
+        # Map coverage
+        if pois:
+            x_coords = [poi.get_x() for poi in pois]
+            y_coords = [poi.get_y() for poi in pois]
+            print(f"\n🗺️  Map Coverage:")
+            print(f"   X-range: {min(x_coords):.0f} - {max(x_coords):.0f}")
+            print(f"   Y-range: {min(y_coords):.0f} - {max(y_coords):.0f}")
+        
+        print("="*50)
+
+    def view_poi_details(self):
+        """View detailed information about a specific POI"""
+        pois = self.system.get_pois()
+        if not pois:
+            print("No POIs available.")
+            return
+        
+        print("Available POIs:")
+        for i, poi in enumerate(pois, 1):
+            print(f"{i}. {poi.get_name()} ({poi.get_poi_type()})")
+        
+        try:
+            choice = self.get_valid_int("Select POI for details: ", 1, len(pois))
+            selected_poi = pois[choice - 1]
+        except KeyboardInterrupt:
+            return
+        
+        print(f"\n=== {selected_poi.get_name()} Details ===")
+        print(f"ID: {selected_poi.get_id()}")
+        print(f"Type: {selected_poi.get_poi_type()}")
+        print(f"Coordinates: {selected_poi.get_coordinates()}")
+        
+        attributes = selected_poi.get_attributes()
+        if attributes:
+            print("Attributes:")
+            for key, value in attributes.items():
+                print(f"  • {key}: {value}")
+        else:
+            print("Attributes: None")
+        
+        # Show visitor statistics for this POI
+        visitors_to_this_poi = []
+        for visitor in self.system.get_visitors():
+            visits = visitor.get_visits_to_poi(selected_poi.get_id())
+            if visits:
+                visitors_to_this_poi.extend([(visitor.get_name(), visit) for visit in visits])
+        
+        if visitors_to_this_poi:
+            print(f"\nVisitor History ({len(visitors_to_this_poi)} visits):")
+            print(f"{'Visitor':<20} {'Date':<12} {'Rating'}")
+            print("-" * 40)
+            
+            # Sort by date (most recent first)
+            for visitor_name, visit in visitors_to_this_poi:
+                rating = visit.get('rating', 'N/A')
+                print(f"{visitor_name:<20} {visit['date']:<12} {rating}")
+        else:
+            print("\nNo visitors have visited this POI yet.")
 
 
 def main():

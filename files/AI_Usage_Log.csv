@@ -1,0 +1,576 @@
+Prompt,Varification (method & result)
+"I am building `Yet another POI Management System` in python with the assignment given. For starting, I want to write pyproject.toml file that will be used to local install. Currently, it is like this:
+```
+[build-system]
+requires = [""hatchling""]
+build-backend = ""hatchling.build""
+
+[project]
+name = ""yapoims""
+version = ""0.0.1""
+authors = [
+    { name=""Abror Shopulatov"", email=""murodbeck@proton.me"" }
+]
+maintainers = [
+    { name=""Abror Shopulatov"", email=""murodbeck@proton.me"" }
+]
+license = {file = ""LICENSE""}
+keywords = [""robotspeak"", ""programming-language"", ""robot"", ""2d-environment"", ""interpreter""]
+description = ""robotspeak - a programming language for controlling the actions and movements of a small robot, within a virtual 2D environment.""
+readme = ""README.md""
+requires-python = "">=3.6""
+classifiers = [
+    ""Programming Language :: Python :: 3"",
+    ""License :: OSI Approved :: MIT License"",
+    ""Operating System :: OS Independent"",
+    ""Topic :: Software Development :: Interpreters"",
+    ""Topic :: Education"",
+    ""Topic :: Games/Entertainment :: Simulation""
+]
+
+[project.urls]
+""Homepage"" = ""https://github.com/murodbecks/yapoims""
+""Bug Tracker"" = ""https://github.com/murodbecks/yapoims/issues""
+""Repository"" = ""https://github.com/murodbecks/yapoims""
+```
+
+I copied from another project and modified some parts. Can you help me fixing `keywords`, `description` and `classifiers`?
+
+Attachments:
+[IA1_Brief.pdf](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBlI8XH9e1BcmiURzhX5TuWPStDvQy40EIdZrF)",manually checked the suggection -> deleted unnecessary part of suggested classifiers -> modified
+"Alright, in my view I need to implement 4 classes: `POI` (for each POI), `GroupOfPois` (for group of POIs), `Visitor` (for each visitor), `PoiMS` (for managing everything else). I want it to be synchronous, so I probably need 2 files (either jsonl or yaml, I need advice on advantages and disadvantages of both) that will work as database for POIs and Visitors. Every time when I do operation on POI or Visitor, they'll be updated. 
+
+I am at the beginning of the project, so I am planning. And I am here to discuss those designs. What do you think about my assessment?",had a discussion about my design choices -> learned more on the internet -> modified
+what is the difference between storing the data (data persistance) and configuration? I am struggling to wrap my head around what is the input file to be loaded by the program.,tried to clarify what I was struggling to understand -> discussed with other students -> accepted
+How can I set the python type to either int or float in function definition?,learned about setting function definition -> tried in simple settings -> accepted
+"Great. I wrote `Poi` class like this:
+```
+from typing import Union
+
+class Poi:
+    def __init__(self, id: str, name: str, type: str, longitude: Union[int, float], latitude: Union[int, float], attributes: dict):
+        super().__setattr__(""id"", id)
+        super().__setattr__(""name"", name)
+        super().__setattr__(""type"", type)
+        super().__setattr__(""longitude"", longitude)
+        super().__setattr__(""latitude"", latitude)
+        super().__setattr__(""attributes"", attributes)
+    
+    # getters
+    def get_id(self) -> str:
+        return self.id
+    
+    def get_name(self) -> str:
+        return self.name
+    
+    def get_type(self) -> str:
+        return self.type
+    
+    def get_longitude(self) -> Union[int, float]:
+        return self.longitude
+    
+    def get_latitude(self) -> Union[int, float]:
+        return self.latitude
+    
+    def get_attributes(self) -> dict:
+        return self.attributes
+    
+    # setters
+    def set_type(self, new_type) -> None:
+        super().__setattr__(""type"", new_type)
+
+    # attribute functions
+    def add_attribute(self, attribute_key: str, attribute_value = None) -> None:
+        new_attributes = self.get_attributes()
+        new_attributes[attribute_key]  = attribute_value
+        super().__setattr__(""attributes"", new_attributes)
+    
+    def delete_attribute(self, attribute_key: str) -> None:
+        attributes = self.get_attributes()
+        
+        if attribute_key in attributes.keys():
+            del attributes[attribute_key]
+            super().__setattr__(""attributes"", attributes)
+        else:
+            print(f""'{attribute_key}' not in attributes"")
+
+    def change_attribute_name(self, attribute_key: str, new_attribute_key: str) -> None:
+        attributes = self.get_attributes()
+
+        if attribute_key in attributes.keys():
+            attributes[new_attribute_key] = attributes.pop(attribute_key)
+
+            super().__setattr__(""attributes"", attributes)
+        
+        else:
+            print(f""'{attribute_key}' not in attributes"")
+
+    # dunder functions
+    def __repr__(self) -> str:
+        return f""POI(id='{self.get_id()}', name='{self.get_name()}', type='{self.get_type()}', longitude={self.get_longitude()}, latitude={self.get_latitude()})""
+    
+    def __setattr__(self, name, value) -> AttributeError:
+        raise AttributeError(f""can't set attribute '{name}'"")
+    
+    def __delattr__(self, name) -> AttributeError:
+        raise AttributeError(f""can't delete attribute '{name}'"")
+    
+    def __eq__(self, new_poi) -> bool:
+        return all([self.get_id()==new_poi.get_id(), self.get_name()==new_poi.get_name(), self.get_type()==new_poi.get_type(),
+                    self.get_longitude()==new_poi.get_longitude(), self.get_latitude()==new_poi.get_latitude(),
+                    self.get_attributes()==new_poi.get_attributes()])
+    
+poi1 = Poi('01', 'Louvre Abu Dhabi', 'musuem', 10, 30, {'opening_hours': '10:00-18:00', 'entrance_fee': '63 AED'})
+poi1.get_latitude(), poi2.get_latitude()
+```
+
+can you analyze and tell me where there might be bugs in this? Also, I am interested in writing better (the same functionaliry but more understandable) `__eq__` function.",verified Poi class for potential bugs -> chacked suggestions on examples -> modefied
+"what is the difference between `super().__setattr__(""id"", id)` and `object.__setattr__(self, ""id"", id)`?",asked different method of specifying immutable variable based on siggestion -> tested by changing the class -> accepted
+"Alright, here is the `Visitor` class that I wrote:
+```
+class Visitor:
+    def __init__(self, id: str, name: str, nationality: str, visits: list = []):
+        object.__setattr__(self, ""id"", id)
+        object.__setattr__(self, ""name"", name)
+        object.__setattr__(self, ""nationality"", nationality)
+        object.__setattr__(self, ""visits"", [self._verify_visit(visit) for visit in visits if self._verify_visit(visit) is not None])
+    
+    # getters
+    def get_id(self) -> str:
+        return self.id
+    
+    def get_name(self) -> str:
+        return self.name
+    
+    def get_nationality(self) -> str:
+        return self.nationality
+    
+    def get_visits(self) -> list:
+        return self.visits
+    
+    def get_num_visits(self) -> int:
+        return len(self.get_visits())
+    
+    def get_visited_poi_ids(self) -> list:
+        visited_poi_ids = []
+
+        for visit in self.get_visits():
+            visited_poi_ids.append(visit['poi_id'])
+        
+        return visited_poi_ids
+
+    # verifiers
+    def _verify_visit(self, visit: dict) -> Union[dict, None]:
+        if not isinstance(visit, dict):
+            return None
+        
+        key_names = list(visit.keys())
+        for key_name in key_names:
+            if key_name not in ['poi_id', 'date', 'rating']:
+                del visit[key_name]
+
+        if ('poi_id' not in visit.keys()) or ('date' not in visit.keys()):
+            return None
+        elif (not isinstance(visit['poi_id'], str)) or (not isinstance(visit['date'], str)):
+            return None
+        
+        if 'rating' not in visit:
+            visit['rating'] = None
+        elif not isinstance(visit['rating'], int):
+            visit['rating'] = None
+        elif visit['rating'] < 0 or visit['rating'] > 10:
+            visit['rating'] = None
+        
+        return visit
+
+    # visitor functions
+    def add_visit(self, poi_id: str, date: str, rating: int = None) -> None:
+        verfied_visit = self._verify_visit({'poi_id': poi_id, 'date': date, 'rating': rating})
+
+        if verfied_visit is not None:
+            all_visits = self.get_visits()
+            all_visits.append(verfied_visit)
+
+            object.__setattr__(self, ""visits"", all_visits)
+
+    # dunder functions
+    def __repr__(self) -> str:
+        return f""Visitor(id='{self.get_id()}', name='{self.get_name()}', nationality='{self.get_nationality()}', visits={self.get_visits()})""
+    
+    def __setattr__(self, name, value) -> AttributeError:
+        raise AttributeError(f""can't set attribute '{name}'"")
+    
+    def __delattr__(self, name) -> AttributeError:
+        raise AttributeError(f""can't delete attribute '{name}'"")
+    
+    def __eq__(self, other_visitor) -> bool:
+        if not isinstance(other_visitor, Visitor):
+            return False
+        
+        return (self.get_id, self.get_name, self.get_nationality, self.get_visits) == \
+               (other_visitor.get_id, other_visitor.get_name, other_visitor.get_nationality, other_visitor.get_visits)
+
+visitor1 = Visitor('000', 'Andy', 'American', [{'poi_id': '00', 'date': '19/09/2025'}, 
+                                               {'poi_id': '03', 'date': '01/07/2025', 'ratings': 4}, 
+                                               {'poi_id': '01', 'dates': '01/07/2025', 'rating': 4}])
+visitor2 = Visitor('001', 'Bob', 'Spanish', [{'poi_id': '02', 'date': '19/09/2025', 'rating': '4'}, {'poi_id': '00', 'rating': 7}])
+visitor1.add_visit('04', '04/08/2025', 15)
+visitor1.get_visits()
+```
+
+can you check for potential bugs? I want to add date (dd/mm/yyyy) verification to `_verify_visit` function. Can you help me do that (also is there any way we can write this function better?)",verified Visitor class for potential bugs -> chacked suggestions on examples -> modified
+"I am finishing the `poi.py` file. (Attaching the file). Can you help me writing function and class documantation and potentially better `__name__` at the end?
+
+Attachments:
+[poi.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBIol2zCY4wMHBOPs0NvxVQ3nyUXgikbCfpurT)",tried to write a functions' documentation -> manually checked what is added -> modified
+"great. can you do it for `visitor.py` file too?
+
+Attachments:
+[visitor.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBdbCuZEiyKaOogCUwHXbPlf4L8SE0TIV5JB39)",tried to write a functions' documentation -> manually checked what is added -> modified
+"I am building my `yapoims - Yet Another Point of Interest Management System` library based on the assignment given to us in python class. I am writing it with mostly 3 classes: `Poi`, `Visitor` and `PoiManagementSystem` that are responsible for POIs, Visitors and Managing POIs and Visitors respectively. Current file tree looks like this:
+```
+.
+├── configs
+│   └── sample.yaml
+├── files
+│   └── IA1_Brief.pdf
+├── LICENSE
+├── pyproject.toml
+├── README.md
+└── yapoims
+    ├── __init__.py
+    ├── main.py
+    ├── poi.py
+    ├── utils.py
+    └── visitor.py
+```
+
+I have come to the config files. So, `PoiManagementSystem` class can take `config_file_path` (if provided) and should parse the yaml file. There is `sample.yaml` file that I choose the style of sample config yaml files. What I now want to do is to create close to real world config file for Abu Dhabi in YAML file. So, I want you to take 20+ various POIs in Abu Dhabi and try to map it into 1000x1000 map. Add relevant poi_types. Then, create 25+ visitors from different nationalities and interests. 
+
+The assignment asked us to write robust scripts for loading from yaml file, so small mistakes or some edge cases are welcome but make sure it is not too much. Can you help me with that?
+
+Attachments:
+[sample.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBTaSgNMLh1xBJdiUPZFqAYj7EGN6bstgXSk4Q)",tried to generate config file for Abu Dhabi -> vibe checked a bit -> modified
+"Good, but I noticed most visitors have 1-2 visits right? That should not be the case, visitors can have 0 to a lot of (sometimes multiple visits to the same POI). Can you change visitors section according to that?",noticed misconception in generated config file -> vibe checked -> accepted
+great. now can you generate similar (in terms of the style) YAML config file for Tashkent too?,generated config file for Tashkent too -> vibe checked -> accepted
+"I am building my `yapoims - Yet Another Point of Interest Management System` library based on the assignment given to us in python class. I am writing it with mostly 3 classes: `Poi`, `Visitor` and `PoiManagementSystem` that are responsible for POIs, Visitors and Managing POIs and Visitors respectively. Current file tree looks like this:
+```
+.
+├── configs
+│   └── sample.yaml
+├── files
+│   └── IA1_Brief.pdf
+├── LICENSE
+├── pyproject.toml
+├── README.md
+└── yapoims
+    ├── __init__.py
+    ├── main.py
+    ├── poi.py
+    ├── utils.py
+    └── visitor.py
+```
+
+I have come to the config files. So, `PoiManagementSystem` class can take `config_file_path` (if provided) and should parse the yaml file. There is `sample.yaml` file. One of the requirements is having unique ids for pois and visitors. Then, I am having some question on whether config file should have ids? If yes, what if there is duplicate ids? If no, should config file have no ids and I should write my own function to generate unique ids? what do you think?
+
+Attachments:
+[IA1_Brief.pdf](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB8zoglXBLH6T3rdIp5fbBlvJNZjUsQ4A7mR1X)
+[sample.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBTsp43hLh1xBJdiUPZFqAYj7EGN6bstgXSk4Q)",clarified whether config file should have ids -> re-read assignment sheet and rethink -> modified
+"Okay, I hear you but let's cut some corners and make our life easier. shall we? After thinking a bit, I decided to keep id only internally and changed `sample.yaml` file for this. So, users can't specify id even for POIs. We will generate all ids for internal usage. Also, I am making POI types more relaxed (not strict). So, we can extend it with POI attributes and etc. 
+
+Then, I started writing the `main.py` file. Here is current version.
+
+But, somewhere along the adding and deleting pois, poi_types, visitors and etc, I think I am missing something. Can you check my code for potential misses and bugs?
+
+Attachments:
+[sample.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBlqup541BcmiURzhX5TuWPStDvQy40EIdZrFo)
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBnWMoMD8RdGmA7hfuwYlJ3qaWFpibZB9e4I6g)",analyzed for potential bugs -> manually checked each suggestion -> modified
+"Okay, I am writing this function: 
+```
+def get_k_closest_pois(self, x: Union[int, float], y: Union[int, float], k: int) -> list:
+        check_type(x, Union[int, float], ""x"")
+        check_type(y, Union[int, float], ""y"")
+        check_type(k, int, ""k"")
+
+        num_pois = len(self.get_pois())
+        if k > num_pois:
+            print(f""Requested more than number of POIs in the system. Returning all ({num_pois}) POIs."")
+            k = num_pois
+        
+        selected_pois = []
+        for poi in self.get_pois():
+            poi_x, poi_y = poi.get_coordinates()
+            distance = get_distance(x, y, poi_x, poi_y)
+            selected_pois.append((poi.get_id(), poi.get_name(), (poi_x, poi_y), 
+                                    poi.get_poi_type(), distance))
+        
+        # TODO: implement sort based on distance, id, and name (given order if ty)
+        sorted_pois = sorted(selected_pois, )
+        return sorted_pois[:k]
+```
+
+how can I sort selected pois  based on distance, id, and name (given order if ty)?","asked about sorting pois based on distance, id and name -> checked on sample examples -> accepted"
+"Are these two code doing the same function?
+```
+new_attributes = []
+        for attribute in self._all_poi_types[poi_type]['attributes']:
+            if attribute == old_poi_attribute:
+                new_attributes.append(new_poi_attribute)
+            else:
+                new_attributes.append(attribute)
+```
+
+```
+current_attributes = self._all_poi_types[poi_type]['attributes']
+        new_attributes = [new_poi_attribute if attribute == old_poi_attribute else attribute for attribute in current_attributes]
+```",checked for short lambda python code -> reasoned -> accepted
+"I want to check variables for their type:
+```
+def check_type(variable, type):
+    if not isinstance(variable, type):
+        print(f""Warning: `{variable.__name__}` is not valid {type}."")
+        return False
+    return True
+
+cha = 8
+
+check_type(cha, str)
+```
+
+but I am getting error with this. Here I want to get `Warning: `cha` is not valid str`. How can I do that?",learned about getting variable names -> manually checked in examples -> modified
+"Good. I am writing a class and using a lot of type checking. And I want this function to make this easier:
+```
+class ValueValidationError(Exception):
+    """"""Custom exception for maze validation errors""""""
+    pass
+
+def check_type(variable, expected_type, var_name=None):
+    if not isinstance(variable, expected_type):
+        name = var_name or ""variable""
+        type_name = expected_type.__name__
+        raise ValueValidationError(f""Warning: `{name}` is not valid {type_name}."")
+
+    return True
+```
+
+So, can I replace this:
+```
+if not isinstance(poi_type, str):
+            print(f""Warning: Invalid `poi_type` to rename attribute: {poi_type}."")
+            return False
+```
+
+with this:
+```
+check_type(poi_type, str, ""poi_type"")
+```
+
+what are the things should I consider?",verified `check_type` function for potential bugs -> manually checked on examples -> accepted
+"Great. Now I have this file: `main.py`. I discovered this `check_type` function at the middle of writing this. So, I need to migrate other place where I manually checked the type. But, we should do it carefully, in some places, this should work as a just warning and not stopping the function with Error. Don't touch other parts of code. Can you help me with this?
+
+Attachments:
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB19wn5aNs71mzVFPEyGLpvbiWB3xM8w6SH2AY)",asked migrate `main.py` file to `check_type` -> checked differences manually -> modified
+"I am building my `yapoims - Yet Another Point of Interest Management System` library based on the assignment given to us in python class. I am writing it with mostly 3 classes: `Poi`, `Visitor` and `PoiManagementSystem` that are responsible for POIs, Visitors and Managing POIs and Visitors respectively. Current file tree looks like this:
+```
+.
+├── configs
+│   └── sample.yaml
+├── files
+│   └── IA1_Brief.pdf
+├── LICENSE
+├── pyproject.toml
+├── README.md
+└── yapoims
+    ├── __init__.py
+    ├── main.py
+    ├── poi.py
+    ├── utils.py
+    └── visitor.py
+```
+
+I have come to the config files. So, `PoiManagementSystem` class can take `config_file_path` (if provided) and should parse the yaml file. There is `sample.yaml` file. 
+
+Let's focus on `main.py` file where I wrote `PoiManagementSystem` class. That class combines both `Poi` and `Visitor` classes and has bunch of functions to load and manage the state. And, to make life little easier, I made `POI types` more flexible (rather than strict) so, we can modify and add things with more freedom.  I recently finished writing this file. Can you go through file and check for potential bugs and errors?
+
+Attachments:
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBESDTDyV3exBTRfGOPtWjdoSAIUVqQMYK9n2H)
+[poi.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB7LKL1WGsp8RKZoQvW6XcPB0xkjdbA7iHSzgY)
+[utils.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB1556UeNs71mzVFPEyGLpvbiWB3xM8w6SH2AY)
+[visitor.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB1UfgdpNs71mzVFPEyGLpvbiWB3xM8w6SH2AY)
+[__init__.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBilHAOBMVwhVzv83a1OBc4DnGtPqHAjNMdm05)
+[sample.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBbN4b8RjoW7hjkldAp09gm35Y4BHKRJuGQsrE)
+[IA1_Brief.pdf](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBFjPgarRLbS2U1RKIHTf73C50anrhcA4gFo9j)",checked for potential bugs in `main.py` file -> manually go through suggested bugs -> modified
+"I am building my `yapoims - Yet Another Point of Interest Management System` library based on the assignment given to us in python class. I am writing it with mostly 3 classes: `Poi`, `Visitor` and `PoiManagementSystem` that are responsible for POIs, Visitors and Managing POIs and Visitors respectively. Current file tree looks like this:
+```
+.
+├── configs
+│   └── sample.yaml
+├── files
+│   └── IA1_Brief.pdf
+├── LICENSE
+├── pyproject.toml
+├── README.md
+└── yapoims
+    ├── __init__.py
+    ├── main.py
+    ├── poi.py
+    ├── utils.py
+    └── visitor.py
+```
+
+I have come to the config files. So, `PoiManagementSystem` class can take `config_file_path` (if provided) and should parse the yaml file. There is `sample.yaml` file. 
+
+Let's focus on `main.py` file where I wrote `PoiManagementSystem` class. That class combines both `Poi` and `Visitor` classes and has bunch of functions to load and manage the state. And, to make life little easier, I made `POI types` more flexible (rather than strict) so, we can modify and add things with more freedom.  I recently finished writing this file. Can you go through file and check for potential bugs and errors?
+
+Attachments:
+[IA1_Brief.pdf](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBddDE4WyKaOogCUwHXbPlf4L8SE0TIV5JB39t)
+[sample.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBTujqAOLh1xBJdiUPZFqAYj7EGN6bstgXSk4Q)
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB2fnLeKBiBsbTGJOFWDepQXtdnAhL59gwHiNR)
+[poi.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBn7yv3dl8RdGmA7hfuwYlJ3qaWFpibZB9e4I6)
+[utils.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBaWXVzwn4HX4f8WNRroLyUhVJcP65bYOjtqAs)
+[visitor.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBI8WjLJY4wMHBOPs0NvxVQ3nyUXgikbCfpurT)
+[__init__.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBBUWe8U7MGXOBET37Fo51bwJmZPef29yQuqit)",checked for potential bugs in `main.py` file -> manually go through suggested bugs -> modified
+"Okay, I fixed some and the file looks like this. You may still find some bugs but I don't think so. 
+
+In the assignment, we need to clarify boundaries `epsilon-based equality check with a clearly stated ε > 0`. What is that and can you give and idea on how should I change the code?
+
+Attachments:
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB5B2zOrPJQaKcD36LE0I9xHeVwPoZ274GligF)",learned about epsilon specified in the assignment -> manually checked -> accepted
+"Great. Now, can you generate demonstration example for `main.py` that loads `configs/sample.yaml` and does some uses some functions? It should be clear and concise and should demonstrate how to use the class.",used AI for generating demo -> run the file in terminal -> accepted
+"Great. Now, it is time to write some tests. I created separate `tests/` folder and init there are 3 files: `test_visitor.py`, `test_poi.py` and `test_main.py`. I want to write tests to test visitor, poi and main separately. The tests should cover broad range. I am attaching `visitor.py` which is what we start first. 
+
+Remember to generate clear and concise test cases that checks from basic things to some edge cases. Don't generate too much tests. Just handful but high quality ones are enough. Can you help me generating `test_visitor.py` file?
+
+Attachments:
+[visitor.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBfNG0uX8lo8HJNPbtzKhcYD5MVAlqm6yOvdCw)",generated test file for `visitor.py` -> run in the terminal -> accepted
+"Okay. Now, let's generate `test_poi.py` in the same style above. Don't forget the criterias
+
+Attachments:
+[poi.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBHOO21YTetaYDyhLAZzw6cGSTdRr5ob4P9Wuj)",generated test file for `poi.py` -> run in the terminal -> accepted
+"Finally, let's generate `test_main.py`. The same style and rules but in this case, you can start without config file or use `configs/abu_dhabi.yaml` to check whether it is working as it should.
+
+Attachments:
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBBjiKO37MGXOBET37Fo51bwJmZPef29yQuqit)
+[abu_dhabi.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBZF6VVHa4jdJiYBEbefpu61PtL3TV5aKw0Fq7)",generated test file for `main.py` -> run in the terminal -> modified
+"Oh, I found bug here:
+```
+def _add_poi_to_poi_types(self, poi) -> None:
+        poi_type = poi.get_poi_type()
+        
+        if poi_type not in self.get_poi_types().keys():
+            self._all_poi_types[poi_type] = {""attributes"": poi.get_attribute_names(), ""num_pois"": 0}
+        else:
+            missing_attributes = [attribute for attribute in poi.get_attribute_names() if attribute not in self._all_poi_types[poi_type]['attributes']]
+            self._all_poi_types[poi_type]['attributes'].extend(missing_attributes)
+        
+        self._all_poi_types[poi_type]['num_pois'] += 1
+```
+` self._all_poi_types[poi_type]['attributes'].extend(missing_attributes)` causing errors. why is this and how can I fix that?",looked into the bugs causing test cases fail -> fixed the bug and no failing test cases -> modified
+is there any way to test all there with one terminal command?,learned about launching all tests -> tried in terminal -> accepted
+"here is the `cli.py` file that I came up with. But it is limited in the scope in what it can do. I want to make it work for every aspect. What changes should I make to do that?
+
+Attachments:
+[cli.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBZAQIJBna4jdJiYBEbefpu61PtL3TV5aKw0Fq)",tried to get complete `cli.py` -> manually tested in terminal cli -> rejected
+"I am building my `yapoims - Yet Another Point of Interest Management System` library based on the assignment given to us in python class. I am writing it with mostly 3 classes: `Poi`, `Visitor` and `PoiManagementSystem` that are responsible for POIs, Visitors and Managing POIs and Visitors respectively. Current file tree looks like this:
+```
+.
+├── configs
+│   ├── abu_dhabi.yaml
+│   ├── sample.yaml
+│   └── tashkent.yaml
+├── files
+│   └── IA1_Brief.pdf
+├── LICENSE
+├── pyproject.toml
+├── README.md
+├── tests
+│   ├── test_main.py
+│   ├── test_poi.py
+│   └── test_visitor.py
+└── yapoims
+    ├── __init__.py
+    ├── main.py
+    ├── poi.py
+    ├── utils.py
+    └── visitor.py
+```
+
+I am working on `cli.py` file now. Currently it is good but some functions are not implemented or not working properly. Here is some examples:
+```
+------------------------------
+POI MANAGEMENT
+------------------------------
+1. Add POI Type
+2. Add POI
+3. Delete POI
+4. Delete POI Type
+5. List POIs by Type
+6. Rename POI Type
+7. Manage POI Type Attributes
+0. Back to Main Menu
+
+Enter your choice: 2
+Available POI types: museum, landmark, theme_park, park, restaurant, mall, beach
+Enter POI name: MBZUAI
+Enter POI type: university
+Invalid POI type. Available types: ['museum', 'landmark', 'theme_park', 'park', 'restaurant', 'mall', 'beach']
+```
+could not enter non-existent POI type, but I designed the PoiManagementClass such that Poi types are more flexible and we can add new type.
+
+we are missing `system_information_submenu`, `view_visitor_details` and some other functions that I am not explored yet. How can I make `cli.py` complete with all things working properly?
+
+Attachments:
+[IA1_Brief.pdf](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB39RFpYFq0Kc8DnVALywhxHzaqIoRlYsCpWeP)
+[abu_dhabi.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBEJ5wnY3exBTRfGOPtWjdoSAIUVqQMYK9n2HN)
+[sample.yaml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBGZsIGQ0n4K9gk5QhRjzavHUWPy3ueCmOqGFA)
+[pyproject.toml](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBFxOob3zRLbS2U1RKIHTf73C50anrhcA4gFo9)
+[cli.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBkqHGvg2CsRtIupMnm4wiXfrQ1lZSYL0Bjbh9)
+[main.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBaWxcIpW4HX4f8WNRroLyUhVJcP65bYOjtqAs)
+[poi.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHB57SGLcPJQaKcD36LE0I9xHeVwPoZ274GligF)
+[utils.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBAXkmQGSWnYLbUlSh5mV3vRd4FHItgM7oyTCk)
+[visitor.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBEYdoBF3exBTRfGOPtWjdoSAIUVqQMYK9n2HN)
+[__init__.py](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBWBjDZAtbhyg2CtSMnOxBFIcRU8635HGNzadY)",tried to get complete `cli.py` -> manually tested in terminal cli -> accepted
+"Okay good. Now, I need to write a good README explaining the project and how it works. It should be clear and concise. Should cover cli and python usage. I started with this. Can you help me to finish it?
+
+Attachments:
+[README.md](https://upoevdcxa3.ufs.sh/f/IN4OjmY4wMHBQa5sZNKIuNKMwgkU3GFCHxvhZfDR7BqliWeb)",used AI for generating detailed README -> manually read through -> modified
+"Great. I think it is working now. But I can't find (or there is no) way to look at POIs, POI types and Visitors. Just simply viewing current things. How can I add that?",asked advice on how to add new thing to cli -> reused the cli -> accepted
+"I am building my `yapoims - Yet Another Point of Interest Management System` library based on the assignment given to us in python class. I am writing it with mostly 3 classes: `Poi`, `Visitor` and `PoiManagementSystem` that are responsible for POIs, Visitors and Managing POIs and Visitors respectively. Current file tree looks like this:
+```
+.
+├── configs
+│   ├── abu_dhabi.yaml
+│   ├── sample.yaml
+│   └── tashkent.yaml
+├── files
+│   └── IA1_Brief.pdf
+├── LICENSE
+├── playground.ipynb
+├── pyproject.toml
+├── README.md
+├── tests
+│   ├── test_main.py
+│   ├── test_poi.py
+│   └── test_visitor.py
+└── yapoims
+    ├── __init__.py
+    ├── cli.py
+    ├── main.py
+    ├── poi.py
+    ├── utils.py
+    └── visitor.py
+```
+
+Now, it is time to write a report and reflection. Here is the criteria:
+```
+Report (40%)
+•Design & Data Model: entities, invariants and (if used) persistence format.
+•Edge Policies: boundary ε, tie-break rules, counting rules (distinct vs. repeated visits),
+coordinate bounds.
+•Usage Guide: sample menu session + sample configuration.
+•Reflection (300–500 words): trade-offs and constraints that shaped the design.
+```
+
+I am also uploading AI Usage logsheet that have prompts that I used throughout the building the project. So, it contains some decisions went into designing. 
+
+We can write both report and reflection in markdown format and convert to pdf at the end (not now). Both should be clear and concise, clearly stating the points and thinking process that lead to that decision. Avoid any AI slop that is looks good but annoying to read as it has too much slop. can you help me writing these?",asked to write a report and reflection -> read through -> modified
