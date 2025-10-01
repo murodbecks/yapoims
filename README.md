@@ -4,7 +4,7 @@
 
 **Yet another POI Management System** (`yapoims` for short) - is a POI (Point of Interest) Management System built in Python. The project is done as part of `Individual Assignment 1` in `AI1030 - Python Programming` course at MBZUAI.
 
-More information about project requirements can be found in [the assignment brief](files/IA1_Brief.pdf).
+More information about project requirements can be found in [the assignment brief](files/IA1_Brief.pdf). The report on `Design & Data Model`, `Edge Policies`, and `Usage Policy` can be found in [the report](files/report.md). The reflection on `trade-offs and constraints that shaped the design` can be found in [the reflection](files/reflection.md).
 
 ## Features
 
