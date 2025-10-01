@@ -30,8 +30,10 @@ dependencies = [
     "pytest==8.4.2"
 ]
 
-
 [project.urls]
 "Homepage" = "https://github.com/murodbecks/yapoims"
 "Bug Tracker" = "https://github.com/murodbecks/yapoims/issues"
 "Repository" = "https://github.com/murodbecks/yapoims"
+
+[project.scripts]
+yapoims = "yapoims.cli:main"
