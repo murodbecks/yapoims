@@ -1,3 +1,7 @@
 hello this is for AI1030 Python programming lab11
 we are experimenting with git
 don't take it as part of assignment
+
+Summarize: we still doing lab11 and not done yet
+
+Insights: learning git from scratch
