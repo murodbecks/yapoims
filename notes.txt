@@ -1,0 +1,3 @@
+hello this is for AI1030 Python programming lab11
+we are experimenting with git
+don't take it as part of assignment
