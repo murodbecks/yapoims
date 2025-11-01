@@ -5,3 +5,6 @@ don't take it as part of assignment
 Summarize: we still doing lab11 and not done yet
 
 Insights: learning git from scratch
+
+Summary:
+ we are doing lab11 in python class.
